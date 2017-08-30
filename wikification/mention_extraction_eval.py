@@ -67,7 +67,7 @@ for dataset in datasets:
         
         """
         """"""
-        myMentions = mentionExtract(" ".join(line['text']), mthd = 'cls1')['mentions']
+        myMentions = mentionExtract(" ".join(line['text']), mthd = 'cls2')['mentions']
         
         # put in right format
         #print trueMentions
@@ -100,7 +100,7 @@ for dataset in datasets:
             
 with open('/users/cs/amaral/wikisim/wikification/mention_extraction_results.txt', 'a') as resultFile:
     resultFile.write(str(datetime.now()) + '\n')
-    resultFile.write('Using cls1 (longest dominant right) with initial filter and limit amount.' + '\n\n')
+    resultFile.write('Using cls2 (all overlaps) with less than 10 filter v2 and limit amount.' + '\n\n')
     for dataset in datasets:
         resultFile.write(dataset['name'] + ':\n')
         resultFile.write('\n    Prec :' + str(performances[dataset['name']]['Precision'])

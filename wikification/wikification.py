@@ -517,13 +517,18 @@ def mentionExtract(text, mthd = 'cls2'):
         splitText = [] # the text now in split form
         mentions = [] # mentions before remove inadequate ones
         textData = [] # [[begin,end,word,anchorProb],...]
+        
+        
+        tmp1 = tmp1.decode('utf-8')
+        
+        
         i = 0 # for wordIndex
         # get rid of extra un-needed Solr data
         for item in textData0:
             mentions.append([i, item[1], item[3]])
             i += 1
             # also fill split text
-            splitText.append(text[item[1]:item[3]])
+            splitText.append(tmp1[item[1]:item[3]])
         if 'gbc-er' not in mlModels:
             mlModels['gbc-er'] = pickle.load(open(mlModelFiles['gbc-er'], 'rb'))
         mentions = getGoodMentions(splitText, mentions, mlModels['gbc-er'])
@@ -541,19 +546,24 @@ def mentionExtract(text, mthd = 'cls2'):
         splitText = [] # the text now in split form
         mentions = [] # mentions before remove inadequate ones
         textData = [] # [[begin,end,word,anchorProb],...]
+        
+        
+        tmp1 = tmp1.decode('utf-8')
+        
+        
         i = 0 # for wordIndex
         # get rid of extra un-needed Solr data
         for item in textData0:
             mentions.append([i, item[1], item[3]])
             i += 1
             # also fill split text
-            splitText.append(text[item[1]:item[3]])
+            splitText.append(tmp1[item[1]:item[3]])
         if 'gbc-er' not in mlModels:
             mlModels['gbc-er'] = pickle.load(open(mlModelFiles['gbc-er'], 'rb'))
         mentions = getGoodMentions(splitText, mentions, mlModels['gbc-er'], True)
     
     # filter out mentions
-    filters = []
+    """filters = []
     with open('/users/cs/amaral/wikisim/wikification/mentions-filter.txt', 'r') as f:
         for line in f:
             filters.append(line.strip())
@@ -561,8 +571,19 @@ def mentionExtract(text, mthd = 'cls2'):
     goodMentions = []
     for mention in mentions:
         if splitText[mention[0]] not in filters:
-            goodMentions.append(mention)
+            goodMentions.append(mention)"""
     
+    goodMentions = []
+    for mention in mentions:
+        sment = sorted(anchor2concept(splitText[mention[0]]), 
+                  key = itemgetter(1), reverse = True)
+        if len(sment) == 0:
+            amt = 11
+        else:
+            amt = sment[0][1]
+        if amt > 10:
+            goodMentions.append(mention)
+            
     return {'text':splitText, 'mentions':goodMentions}
 
 def getMentionsInSentence(textData, mainWord):
@@ -697,7 +718,7 @@ def generateCandidates(textData, maxC, hybrid = False):
                 pass
             
         candidates.append(results[:maxC]) # take up to maxC of the results
-    
+        
     return candidates
 
 def precision(truthSet, mySet):
@@ -1642,9 +1663,19 @@ def doWikify(text, maxC = 20, hybridC = False, method = 'multi', erMethod = 'cls
     # text data now has text in split form and, the mentions
     textData = mentionExtract(text, mthd = erMethod)
     
-    
     # generate candidates
     candidates = generateCandidates(textData, maxC, hybridC)
+    
+    tmpM = copy.deepcopy(textData['mentions'])
+    tmpC = copy.deepcopy(candidates)
+    
+    # get rid of mentions with no candidates
+    for i in range(len(textData['mentions']) - 1, -1, -1):
+        if len(candidates[i]) == 0:
+            del tmpM[i]
+            del tmpC[i]
+    textData['mentions'] = tmpM
+    candidates = tmpC
     
     # disambiguate each mention to its candidates
     if method == 'popular':
@@ -1731,4 +1762,3 @@ def annotateText(text, maxC = 20, hybridC = False, method = 'multi', erMethod = 
             newText += text[i]
             
     return newText
-    
