@@ -3323,3 +3323,139 @@ multi:
     M BOT Macro F1 :0.013354439294
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+2017-08-30 16:07:51.072561
+maxCands: 20
+mlModel: lmart
+erMethod: cls1
+doHybrid: False
+2017-08-30 16:07:51.072599
+
+Comment: With limit amount.
+
+kore:
+multi:
+    M Micro Prec :0.695421245421
+    M Micro Rec :0.30985915493
+    M Micro F1 :0.428701562969
+    M Macro Prec :0.419666666667
+    M Macro Rec :0.313
+    M Macro F1 :0.358568698817
+    M BOT Micro Prec :0.695421245421
+    M BOT Micro Rec :0.30985915493
+    M BOT Micro F1 :0.428701562969
+    M BOT Macro Prec :0.419666666667
+    M BOT Macro Rec :0.313
+    M BOT Macro F1 :0.428701562969
+AQUAINT:
+multi:
+    M Micro Prec :0.48615145105
+    M Micro Rec :0.280291970803
+    M Micro F1 :0.355575752726
+    M Macro Prec :0.361290931291
+    M Macro Rec :0.286280237587
+    M Macro F1 :0.31944119386
+    M BOT Micro Prec :0.692286331954
+    M BOT Micro Rec :0.322627737226
+    M BOT Micro F1 :0.440137307332
+    M BOT Macro Prec :0.524026695527
+    M BOT Macro Rec :0.331645398711
+    M BOT Macro F1 :0.440137307332
+MSNBC:
+multi:
+    M Micro Prec :0.638418157999
+    M Micro Rec :0.269406392694
+    M Micro F1 :0.378914478234
+    M Macro Prec :0.417056161483
+    M Macro Rec :0.295147243617
+    M Macro F1 :0.345668037007
+    M BOT Micro Prec :0.284949643959
+    M BOT Micro Rec :0.188736681887
+    M BOT Micro F1 :0.227071998372
+    M BOT Macro Prec :0.384332068506
+    M BOT Macro Rec :0.43168044782
+    M BOT Macro F1 :0.227071998372
+wiki5000:
+multi:
+    M Micro Prec :0.741513779551
+    M Micro Rec :0.34333020931
+    M Micro F1 :0.469346899192
+    M Macro Prec :0.476857905983
+    M Macro Rec :0.39831375411
+    M Macro F1 :0.434061273622
+    M BOT Micro Prec :0.791165835689
+    M BOT Micro Rec :0.350905966885
+    M BOT Micro F1 :0.486177509879
+    M BOT Macro Prec :0.512650512821
+    M BOT Macro Rec :0.411117598002
+    M BOT Macro F1 :0.486177509879
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+2017-08-30 16:30:08.546980
+maxCands: 20
+mlModel: lmart
+erMethod: cls1
+doHybrid: False
+2017-08-30 16:30:08.547012
+
+Comment: Without limit amount.
+
+kore:
+multi:
+    M Micro Prec :0.695421245421
+    M Micro Rec :0.30985915493
+    M Micro F1 :0.428701562969
+    M Macro Prec :0.419666666667
+    M Macro Rec :0.313
+    M Macro F1 :0.358568698817
+    M BOT Micro Prec :0.695421245421
+    M BOT Micro Rec :0.30985915493
+    M BOT Micro F1 :0.428701562969
+    M BOT Macro Prec :0.419666666667
+    M BOT Macro Rec :0.313
+    M BOT Macro F1 :0.428701562969
+AQUAINT:
+multi:
+    M Micro Prec :0.48615145105
+    M Micro Rec :0.280291970803
+    M Micro F1 :0.355575752726
+    M Macro Prec :0.361290931291
+    M Macro Rec :0.286280237587
+    M Macro F1 :0.31944119386
+    M BOT Micro Prec :0.692286331954
+    M BOT Micro Rec :0.322627737226
+    M BOT Micro F1 :0.440137307332
+    M BOT Macro Prec :0.524026695527
+    M BOT Macro Rec :0.331645398711
+    M BOT Macro F1 :0.440137307332
+MSNBC:
+multi:
+    M Micro Prec :0.638418157999
+    M Micro Rec :0.269406392694
+    M Micro F1 :0.378914478234
+    M Macro Prec :0.417056161483
+    M Macro Rec :0.295147243617
+    M Macro F1 :0.345668037007
+    M BOT Micro Prec :0.284949643959
+    M BOT Micro Rec :0.188736681887
+    M BOT Micro F1 :0.227071998372
+    M BOT Macro Prec :0.384332068506
+    M BOT Macro Rec :0.43168044782
+    M BOT Macro F1 :0.227071998372
+wiki5000:
+multi:
+    M Micro Prec :0.741513779551
+    M Micro Rec :0.34333020931
+    M Micro F1 :0.469346899192
+    M Macro Prec :0.476857905983
+    M Macro Rec :0.39831375411
+    M Macro F1 :0.434061273622
+    M BOT Micro Prec :0.791165835689
+    M BOT Micro Rec :0.350905966885
+    M BOT Micro F1 :0.486177509879
+    M BOT Macro Prec :0.512650512821
+    M BOT Macro Rec :0.411117598002
+    M BOT Macro F1 :0.486177509879
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -453,7 +453,7 @@ def getGoodMentions(splitText, mentions, model, overlapFix = False):
             if len(mention) == goodlen:
                 finalMentions.append(mention[:3])
                 
-        finalMentions = sorted(finalMentions, key = itemgetter(1), reverse = False)[:amount]
+        #finalMentions = sorted(finalMentions, key = itemgetter(1), reverse = False)[:amount]
 
         return finalMentions
     
@@ -578,7 +578,7 @@ def mentionExtract(text, mthd = 'cls2'):
         sment = sorted(anchor2concept(splitText[mention[0]]), 
                   key = itemgetter(1), reverse = True)
         if len(sment) == 0:
-            amt = 11
+            amt = 0
         else:
             amt = sment[0][1]
         if amt > 10:

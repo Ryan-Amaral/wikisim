@@ -30,7 +30,7 @@ datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')},
 
 # many different option for combinations of datasets for smaller tests
 #datasets = [{'name':'MSNBC', 'path':os.path.join(pathStrt,'MSNBC.txt.json')}]
-datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')}]
+#datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')}]
 #datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')}, {'name':'AQUAINT', 'path':os.path.join(pathStrt,'AQUAINT.txt.json')}]
 #datasets = [{'name':'wiki5000', 'path':os.path.join(pathStrt,'wiki-mentions.5000.json')}]
 #datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')}, {'name':'AQUAINT', 'path':os.path.join(pathStrt,'AQUAINT.txt.json')}, {'name':'MSNBC', 'path':os.path.join(pathStrt,'MSNBC.txt.json')},{'name':'nopop', 'path':os.path.join(pathStrt,'nopop.json')}]
@@ -55,8 +55,8 @@ if 'word2vec' in methods:
         word2vec = gensim_loadmodel('/users/cs/amaral/cgmdir/WikipediaClean5Negative300Skip10.Ehsan/WikipediaClean5Negative300Skip10')
         
 # can do both, none would be pointless
-doSplit = True # mentions are given
-doManual = False # mentions not given
+doSplit = False # mentions are given
+doManual = True # mentions not given
 
 verbose = True # decides how much stuff to ouput
 
@@ -339,7 +339,7 @@ with open('/users/cs/amaral/wikisim/wikification/wikification_results.txt', 'a')
                      + 'doHybrid: ' + str(doHybrid) + '\n'
                      + str(datetime.now()) + '\n\n')
     
-    comment = 'Please make sure you delete this test.'
+    comment = 'Without limit amount.'
     resultFile.write('Comment: ' + comment + '\n\n')
     
     for dataset in datasets:
