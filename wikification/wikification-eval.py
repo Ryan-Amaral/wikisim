@@ -18,6 +18,9 @@ import tagme
 import os
 import json
 from sets import Set
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 tagme.GCUBE_TOKEN = "f6c2ba6c-751b-4977-a94c-c140c30e9b92-843339462"
 pathStrt = '/users/cs/amaral/wsd-datasets'
@@ -39,11 +42,11 @@ datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')},
 #datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')}, {'name':'AQUAINT', 'path':os.path.join(pathStrt,'AQUAINT.txt.json')}, {'name':'MSNBC', 'path':os.path.join(pathStrt,'MSNBC.txt.json')},{'name':'wiki500', 'path':os.path.join(pathStrt,'wiki-mentions.500.json')},{'name':'nopop', 'path':os.path.join(pathStrt,'nopop.json')}]
 #datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')}, {'name':'AQUAINT', 'path':os.path.join(pathStrt,'AQUAINT.txt.json')}, {'name':'MSNBC', 'path':os.path.join(pathStrt,'MSNBC.txt.json')},{'name':'wiki5000', 'path':os.path.join(pathStrt,'wiki-mentions.5000.json')},{'name':'nopop', 'path':os.path.join(pathStrt,'nopop.json')}]
 #datasets = [{'name':'wiki500', 'path':os.path.join(pathStrt,'wiki-mentions.500.json')}]
-#datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')}, {'name':'AQUAINT', 'path':os.path.join(pathStrt,'AQUAINT.txt.json')}, {'name':'MSNBC', 'path':os.path.join(pathStrt,'MSNBC.txt.json')},{'name':'wiki5000', 'path':os.path.join(pathStrt,'wiki-mentions.5000.json')},{'name':'nopop', 'path':os.path.join(pathStrt,'nopop.json')}]
+datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')}, {'name':'AQUAINT', 'path':os.path.join(pathStrt,'AQUAINT.txt.json')}, {'name':'MSNBC', 'path':os.path.join(pathStrt,'MSNBC.txt.json')},{'name':'wiki5000', 'path':os.path.join(pathStrt,'wiki-mentions.5000.json')},{'name':'nopop', 'path':os.path.join(pathStrt,'nopop.json')}]
 #datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')}, {'name':'AQUAINT', 'path':os.path.join(pathStrt,'AQUAINT.txt.json')}, {'name':'MSNBC', 'path':os.path.join(pathStrt,'MSNBC.txt.json')},{'name':'nopop', 'path':os.path.join(pathStrt,'nopop.json')}]
 
 # 'popular', 'context1', 'context2', 'word2vec', 'coherence', 'tagme', 'multi'
-methods = ['multi']
+methods = ['popular', 'context1', 'context2', 'word2vec', 'coherence', 'multi']
 # 'lmart', 'gbr', 'etr', 'rfr'
 mlModel = 'lmart' # to be used with method multi
 erMethod = 'cls1' # method for entity recognition / mention extraction
@@ -55,13 +58,13 @@ if 'word2vec' in methods:
         word2vec = gensim_loadmodel('/users/cs/amaral/cgmdir/WikipediaClean5Negative300Skip10.Ehsan/WikipediaClean5Negative300Skip10')
         
 # can do both, none would be pointless
-doSplit = False # mentions are given
-doManual = True # mentions not given
+doSplit = True # mentions are given
+doManual = False # mentions not given
 
 verbose = True # decides how much stuff to ouput
 
 maxCands = 20 # amount of candidates for entity candidate generation (20 prefered)
-doHybrid = False # whether to do hybrid candidate generation (False prefered)
+doHybrid = False # whether to do hybrid candidate generation (True prefered)
 
 
 performances = {} # record data here
@@ -78,7 +81,7 @@ for dataset in datasets:
     
     # get all lines
     for line in dataFile:
-        dataLines.append(json.loads(line.decode('utf-8').strip()))
+        dataLines.append(json.loads(line.decode("raw_unicode_escape").encode('utf-8').strip()))
         
     print '\n' + dataset['name'] + '\n'
     
@@ -339,7 +342,7 @@ with open('/users/cs/amaral/wikisim/wikification/wikification_results.txt', 'a')
                      + 'doHybrid: ' + str(doHybrid) + '\n'
                      + str(datetime.now()) + '\n\n')
     
-    comment = 'Without limit amount.'
+    comment = 'Testing pre split popular candidate generation.'
     resultFile.write('Comment: ' + comment + '\n\n')
     
     for dataset in datasets:

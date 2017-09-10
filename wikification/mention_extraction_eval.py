@@ -10,6 +10,10 @@ import os
 from wikification import *
 from datetime import datetime
 from pycorenlp import StanfordCoreNLP
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 nlp = StanfordCoreNLP('http://localhost:9000')
 
 pathStrt = '/users/cs/amaral/wsd-datasets'
@@ -39,7 +43,7 @@ for dataset in datasets:
     dataFile = open(dataset['path'], 'r')
     dataLines = []
     for line in dataFile:
-        dataLines.append(json.loads(line.decode('utf-8').strip()))
+        dataLines.append(json.loads(line.decode("raw_unicode_escape").encode('utf-8').strip()))
     
     # reset counters
     totalPrec = 0
@@ -67,7 +71,8 @@ for dataset in datasets:
         
         """
         """"""
-        myMentions = mentionExtract(" ".join(line['text']), mthd = 'cls2')['mentions']
+        print line
+        myMentions = mentionExtract(" ".join(line['text']), mthd = 'cnlp')['mentions']
         
         # put in right format
         #print trueMentions
@@ -100,7 +105,7 @@ for dataset in datasets:
             
 with open('/users/cs/amaral/wikisim/wikification/mention_extraction_results.txt', 'a') as resultFile:
     resultFile.write(str(datetime.now()) + '\n')
-    resultFile.write('Using cls2 (all overlaps) with less than 10 filter v2 and limit amount.' + '\n\n')
+    resultFile.write('Using cnlp' + '\n\n')
     for dataset in datasets:
         resultFile.write(dataset['name'] + ':\n')
         resultFile.write('\n    Prec :' + str(performances[dataset['name']]['Precision'])

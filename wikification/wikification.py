@@ -410,7 +410,6 @@ def getGoodMentions(splitText, mentions, model, overlapFix = False):
             goodMentions.append(mentions[i])
             # put score of prediction
             goodMentions[-1].append(model.predict_proba([aMention])[0][1]) # put score of prediction
-            
     
     # get the right amount needed
     if True:
@@ -419,7 +418,7 @@ def getGoodMentions(splitText, mentions, model, overlapFix = False):
         amount = len(goodMentions)
             
     if overlapFix == False:
-        goodMentions = sorted(goodMentions, key = itemgetter(1), reverse = False)[:amount]
+        #goodMentions = sorted(goodMentions, key = itemgetter(1), reverse = False)[:amount]
         return goodMentions        
     else:
         """
@@ -453,11 +452,11 @@ def getGoodMentions(splitText, mentions, model, overlapFix = False):
             if len(mention) == goodlen:
                 finalMentions.append(mention[:3])
                 
-        #finalMentions = sorted(finalMentions, key = itemgetter(1), reverse = False)[:amount]
+        finalMentions = sorted(finalMentions, key = itemgetter(1), reverse = False)#[:amount]
 
         return finalMentions
     
-def mentionExtract(text, mthd = 'cls2'):
+def mentionExtract(text, mthd = 'cls1'):
     """
     Description:
         Takes in a text and splits it into the different words/mentions.
@@ -471,7 +470,7 @@ def mentionExtract(text, mthd = 'cls2'):
     """
     
     if mthd == 'cnlp': # use CoreNLP's entity mention annotator
-        output = scnlp.annotate(text, properties={
+        output = scnlp.annotate(text.encode('utf-8'), properties={
             'annotators': 'entitymentions',
             'outputFormat': 'json'
         })
@@ -508,19 +507,11 @@ def mentionExtract(text, mthd = 'cls2'):
     elif mthd == 'cls1': # this one lest solr deal with overlaps
         addr = 'http://localhost:8983/solr/enwikianchors20160305/tag'
         params={'overlaps':'LONGEST_DOMINANT_RIGHT', 'tagsLimit':'5000', 'fl':'id','wt':'json','indent':'on'}
-        try:
-            tmp1 = text.encode('utf-8')
-        except:
-            tmp1 = text
-        r = requests.post(addr, params=params, data=tmp1)
+        r = requests.post(addr, params=params, data=text)
         textData0 = r.json()['tags']
         splitText = [] # the text now in split form
         mentions = [] # mentions before remove inadequate ones
         textData = [] # [[begin,end,word,anchorProb],...]
-        
-        
-        tmp1 = tmp1.decode('utf-8')
-        
         
         i = 0 # for wordIndex
         # get rid of extra un-needed Solr data
@@ -528,7 +519,7 @@ def mentionExtract(text, mthd = 'cls2'):
             mentions.append([i, item[1], item[3]])
             i += 1
             # also fill split text
-            splitText.append(tmp1[item[1]:item[3]])
+            splitText.append(text[item[1]:item[3]])
         if 'gbc-er' not in mlModels:
             mlModels['gbc-er'] = pickle.load(open(mlModelFiles['gbc-er'], 'rb'))
         mentions = getGoodMentions(splitText, mentions, mlModels['gbc-er'])
@@ -536,28 +527,19 @@ def mentionExtract(text, mthd = 'cls2'):
     elif mthd == 'cls2': # this one we deal with overlaps
         addr = 'http://localhost:8983/solr/enwikianchors20160305/tag'
         params={'overlaps':'ALL', 'tagsLimit':'5000', 'fl':'id','wt':'json','indent':'on'}
-        
-        try:
-            tmp1 = text.encode('utf-8')
-        except:
-            tmp1 = text
-        r = requests.post(addr, params=params, data=tmp1)
+        r = requests.post(addr, params=params, data=text.encode('utf-8'))
         textData0 = r.json()['tags']
         splitText = [] # the text now in split form
         mentions = [] # mentions before remove inadequate ones
         textData = [] # [[begin,end,word,anchorProb],...]
-        
-        
-        tmp1 = tmp1.decode('utf-8')
-        
-        
+
         i = 0 # for wordIndex
         # get rid of extra un-needed Solr data
         for item in textData0:
             mentions.append([i, item[1], item[3]])
             i += 1
             # also fill split text
-            splitText.append(tmp1[item[1]:item[3]])
+            splitText.append(text[item[1]:item[3]])
         if 'gbc-er' not in mlModels:
             mlModels['gbc-er'] = pickle.load(open(mlModelFiles['gbc-er'], 'rb'))
         mentions = getGoodMentions(splitText, mentions, mlModels['gbc-er'], True)
@@ -581,7 +563,7 @@ def mentionExtract(text, mthd = 'cls2'):
             amt = 0
         else:
             amt = sment[0][1]
-        if amt > 10:
+        if amt >= 10:
             goodMentions.append(mention)
             
     return {'text':splitText, 'mentions':goodMentions}
@@ -1703,7 +1685,7 @@ def doWikify(text, maxC = 20, hybridC = False, method = 'multi', erMethod = 'cls
             mlModels['lmart'] = pickle.load(open(mlModelFiles['lmart'], 'rb'))
         wikified = wikifyMulti(textData, candidates, text, 'lmart', useSentence = True, window = 7)
     
-    return wikified
+    return sorted(wikified, key = itemgetter(0), reverse = False)
 
 def annotateText(text, maxC = 20, hybridC = False, method = 'multi', erMethod = 'cls2'):
     """
@@ -1717,8 +1699,16 @@ def annotateText(text, maxC = 20, hybridC = False, method = 'multi', erMethod = 
         corresponding wikipedia page.
     """
     
+    try:
+        tmp = text.decode('utf-8')
+    except:
+        tmp = text
+    text = tmp # convert if needed
+    
     # get the annotations
     ants = doWikify(text, maxC = maxC, hybridC = hybridC, method = method, erMethod = erMethod)
+    
+    print ants
     
     # get title and intro of each entity
     strIds = ['id:' +  str(ant[2]) for ant in ants]
@@ -1754,8 +1744,8 @@ def annotateText(text, maxC = 20, hybridC = False, method = 'multi', erMethod = 
             newText += ('<a class="toooltip" target="_blank" href="https://en.wikipedia.org/wiki/'
                        + id2title(ants[curM][2]) + '">' 
                        + text[ants[curM][0]:ants[curM][1]] 
-                       + '<span class="toooltiptext"><strong>' + ants[curM][3].encode('utf-8') + '</strong><br/>' 
-                       + ants[curM][4].encode('utf-8')
+                       + '<span class="toooltiptext"><strong>' + ants[curM][3] + '</strong><br/>' 
+                       + ants[curM][4]
                        + '</span></a>')
             curM += 1
         else:
