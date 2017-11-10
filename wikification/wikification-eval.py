@@ -46,7 +46,7 @@ datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')}, {'name':
 #datasets = [{'name':'kore', 'path':os.path.join(pathStrt,'kore.json')}, {'name':'AQUAINT', 'path':os.path.join(pathStrt,'AQUAINT.txt.json')}, {'name':'MSNBC', 'path':os.path.join(pathStrt,'MSNBC.txt.json')},{'name':'nopop', 'path':os.path.join(pathStrt,'nopop.json')}]
 
 # 'popular', 'context1', 'context2', 'word2vec', 'coherence', 'tagme', 'multi'
-methods = ['popular', 'context1', 'context2', 'word2vec', 'coherence', 'multi']
+methods = ['tagme']
 # 'lmart', 'gbr', 'etr', 'rfr'
 mlModel = 'lmart' # to be used with method multi
 erMethod = 'cls1' # method for entity recognition / mention extraction
@@ -58,8 +58,8 @@ if 'word2vec' in methods:
         word2vec = gensim_loadmodel('/users/cs/amaral/cgmdir/WikipediaClean5Negative300Skip10.Ehsan/WikipediaClean5Negative300Skip10')
         
 # can do both, none would be pointless
-doSplit = True # mentions are given
-doManual = False # mentions not given
+doSplit = False # mentions are given
+doManual = True # mentions not given
 
 verbose = True # decides how much stuff to ouput
 
@@ -185,7 +185,7 @@ for dataset in datasets:
                 if mthd == 'tagme':
                     antns = tagme.annotate(" ".join(line['text']))
                     resultM = []
-                    for an in antns.get_annotations(0.005):
+                    for an in antns.get_annotations(0.3):
                         resultM.append([an.begin,an.end,title2id(an.entity_title)])
                 else:
                     # unsplit string to be manually split and mentions found
