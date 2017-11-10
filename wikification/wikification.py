@@ -1708,7 +1708,7 @@ def annotateText(text, maxC = 20, hybridC = False, method = 'multi', erMethod = 
     # get the annotations
     ants = doWikify(text, maxC = maxC, hybridC = hybridC, method = method, erMethod = erMethod)
     
-    print ants
+    #print ants
     
     # get title and intro of each entity
     strIds = ['id:' +  str(ant[2]) for ant in ants]
