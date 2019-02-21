@@ -33,10 +33,10 @@ fresh_restart=False
 
 
 dsnames = [os.path.join(dsdir_ner, 'kore.json'),
-          os.path.join(dsdir_ner, 'wiki-mentions.5000.json'),
+#          os.path.join(dsdir_ner, 'wiki-mentions.5000.json'),
 #          os.path.join(dsdir_ner, 'aida.json'),  
-          os.path.join(dsdir_ner, 'msnbc.txt.json'),
-          os.path.join(dsdir_ner, 'aquaint.txt.json') 
+#          os.path.join(dsdir_ner, 'msnbc.txt.json'),
+#          os.path.join(dsdir_ner, 'aquaint.txt.json') 
           ]
 
 
@@ -60,9 +60,9 @@ detailedresname=  os.path.join(outdir, 'detailedreslog.txt')
 allparams = (   (CORE_NLP,None, None, LTR_NROWS_L),
 #               (LEARNED_MENTION, SVC_HP_NROWS_S, SVC_HP_CV_S, LTR_NROWS_L), 
 #               (LEARNED_MENTION, SVC_HR_NROWS_S, SVC_HR_CV_S, LTR_NROWS_L),
-              (LEARNED_MENTION, SVC_HP_NROWS_L, SVC_HP_CV_L, LTR_NROWS_L), 
-              (LEARNED_MENTION, SVC_HR_NROWS_L, SVC_HR_CV_L, LTR_NROWS_L))
-
+#              (LEARNED_MENTION, SVC_HP_NROWS_L, SVC_HP_CV_L, LTR_NROWS_L), 
+#              (LEARNED_MENTION, SVC_HR_NROWS_L, SVC_HR_CV_L, LTR_NROWS_L)
+            )
 
 
 

@@ -88,6 +88,7 @@ dependencies:
 - pip=9.0.1=py27ha730c48_4
 - prompt_toolkit=1.0.15=py27h1b593e1_0
 - ptyprocess=0.5.2=py27h4ccb14c_0
+- pycorenlp
 - pycparser=2.18=py27hefa08c5_1
 - pygments=2.2.0=py27h4a8b6f5_0
 - pyopenssl=17.2.0=py27h189ff3b_0
