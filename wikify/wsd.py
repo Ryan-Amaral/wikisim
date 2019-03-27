@@ -382,8 +382,10 @@ def get_scores(S, M, C, method):
         scores = popularity_score(C)
     if method == 'keydisamb'  :
         scores = coherence_scores_driver(C, method='rvspagerank', direction=DIR_BOTH, op_method="keydisamb")
+    if method == 'keydisamb_max':
+        scores = coherence_scores_driver(C,ws=3, method='rvspagerank', direction=DIR_BOTH, op_method='keydisamb', overlap_method='max')
     if method == 'entitycontext'  :
-        scores = coherence_scores_driver(C, method='rvspagerank', direction=DIR_BOTH, op_method="entitycontext")
+        scores = coherence_scores_driver(C,ws=3, method='rvspagerank', direction=DIR_BOTH, op_method="entitycontext")
     if method == 'mention2entity'  :
         scores = mention_candidate_score (S, M, C)
     if method == 'context2context'  :

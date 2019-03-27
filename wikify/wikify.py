@@ -36,7 +36,7 @@ def wikify_string(line, mentionmethod=CORE_NLP, max_t=20):
     
     S,M = detect_mentions(line, mentionmethod)      
     C = generate_candidates(S, M, max_t=max_t, enforce=False)
-    #print(C)
+    
     E = wsd(S, M, C, method='learned')
     for m,e in zip(M,E[1]):
         m[1]=e

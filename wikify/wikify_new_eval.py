@@ -36,13 +36,14 @@ fresh_restart=True
 
 dsnames = [os.path.join(home,'backup/datasets/ner/kore.json'),
           os.path.join(home,'backup/datasets/ner/wiki-mentions.5000.json'),
-#          os.path.join(home,'backup/datasets/ner/aida.json'),  
+          os.path.join(home,'backup/datasets/ner/aida.json'),  
           os.path.join(home,'backup/datasets/ner/msnbc.json'),
           os.path.join(home,'backup/datasets/ner/aquaint.json') 
           ]
 
 methods = ['popularity','keydisamb','entitycontext','mention2entity','context2context','context2profile', 'learned']
-methods = ['context2context']
+methods = ['keydisamb','keydisamb_max']
+#methods = ['keydisamb']
 
 outdir = os.path.join(baseresdir, 'wsd_new')
 # if not os.path.exists(outdir): #Causes synchronization problem

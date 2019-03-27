@@ -164,32 +164,50 @@ def keyentity_candidate_scores(candslist, direction, method):
     return candslist_scores
 
 
-
-def coherence_scores_driver(C, ws=5, method='rvspagerank', direction=DIR_BOTH, op_method="keydisamb"):
+def coherence_scores_driver(C, ws=5, method='rvspagerank', direction=DIR_BOTH, 
+        op_method="keydisamb", overlap_method=None, stride=1):
     """ Assigns a score to every candidate 
         Inputs:
             C: Candidate list [[(c11, p11),...(c1k, p1k)],...[(cn1, pn1),...(c1m, p1m)]]
             ws: Windows size for chunking
             method: similarity method
             direction: embedding type
-            op_method: disambiguation method, either keyentity or entitycontext
+            op_method: disambiguation method, either 'keyentity' or 'entitycontext'
+            overlap_method: method used for overlapping windows approach, 'max', '', or ''.
         Output:
             Candidate Scores
         
     """
-    windows = [[start, min(start+ws, len(C))] for start in range(0,len(C),ws) ]
+    if overlap_method is not None:
+        windows = [[start, min(start+ws, len(C))] 
+                   for start in range(0, max(len(C)-ws, 0)+1,stride) ]
+    else:
+        windows = [[start, min(start+ws, len(C))] 
+                   for start in range(0,len(C),ws)]
+    
     last = len(windows)
     if last > 1 and windows[last-1][1]-windows[last-1][0]<2:
         windows[last-2][1] = len(C)
         windows.pop()
-    scores=[]    
+        
+    scores=[]
+    mention_scores = [[] for _ in range(len(C))] # used in a overlap approach
     for w in windows:
-        chunk_c = C[w[0]:w[1]]
+        chunk_c = C[w[0]:w[1]] # get scores for candidates in window
         if op_method == 'keydisamb':
-            scores += keyentity_candidate_scores(chunk_c, direction, method)
-            
-        if op_method == 'entitycontext':
+            candslist_scores = keyentity_candidate_scores(chunk_c, direction, method)
+        elif op_method == 'entitycontext':
             _, _, candslist_scores = entity_to_context_scores(chunk_c, direction, method);
-            scores += candslist_scores
+        
+        if overlap_method is None:
+            scores += candslist_scores # simply append scores, no overlap
+        elif overlap_method == 'max':
+            for i, row in enumerate(candslist_scores):
+                mention_scores[w[0]+i].append(row)
+                
+    # finalize scores for windowing approach
+    if overlap_method == 'max':
+        for ms in mention_scores:
+            scores.append(list(np.amax(ms, axis=0))) # column-wise max of each mention score matrix
             
     return scores
